@@ -39,3 +39,89 @@ max_lobster <- lobster_abundance %>%
   group_by(SITE, MONTH) %>% 
   summarize(MAX_LENGTH = max(SIZE_MM, na.rm = TRUE))
 ```
+
+# Exercise: Data Visualization
+```{r}
+# Data visualization
+library(readr)
+library(dplyr)
+library(here)
+
+lobster_abundance <- read_csv(
+  "https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/77/8/f32823fba432f58f66c06b589b7efac6"
+) %>% 
+  mutate(SIZE_MM = na_if(SIZE_MM, -99999))
+
+# Exercise 9
+ggplot(data = lobster_abundance, 
+       aes(x = SIZE_MM)) +
+    geom_histogram() +
+    facet_wrap(~SITE)
+
+# Exercise 10
+lobsters_summarize <- lobster_abundance %>% 
+  group_by(SITE, YEAR) %>% 
+  summarize(COUNT = n())
+
+# line plot
+ggplot(data = lobsters_summarize, aes(x = YEAR, y = COUNT)) +
+  geom_line(aes(color = SITE)) 
+
+# line and point plot
+ggplot(data = lobsters_summarize, aes(x = YEAR, y = COUNT)) +
+  geom_point(aes(color = SITE)) +
+  geom_line(aes(color = SITE)) 
+```
+
+```{r}
+# Exercise 11
+lobster_size_lrg <- lobster_abundance %>%
+    filter(YEAR %in% c(2019, 2020, 2021)) %>%
+    mutate(SIZE_BIN = if_else(SIZE_MM <= 70, true = "small", false = "large")) %>%
+    group_by(SITE, SIZE_BIN) %>%
+    summarize(COUNT = n()) %>%
+    drop_na()
+
+# bar plot
+ggplot(data = lobster_size_lrg, aes(x = SITE, y = COUNT, fill = SIZE_BIN)) +
+    geom_col()
+
+# dodged bar plot
+ggplot(data = lobster_size_lrg, aes(x = SITE, y = COUNT, fill = SIZE_BIN)) +
+    geom_col(position = "dodge")
+```
+
+# Exercise 12: make your plots look pretty!
+```{r}
+# Styled dodged bar plot
+lobster_size_plot <- ggplot(
+  data = lobster_size_lrg, 
+  aes(x = SITE, y = COUNT, fill = SIZE_BIN)
+) +
+  geom_col(position = "dodge", color = "black", alpha = 0.85) +
+  labs(
+    title = "Lobster Size Classes by Site",
+    subtitle = "California spiny lobsters sampled from 2019–2021",
+    x = "Site",
+    y = "Number of Lobsters",
+    fill = "Size Class"
+  ) +
+  theme_light() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+
+lobster_size_plot
+
+ggsave(
+  filename = here::here("figs", "lobster_size_classes_by_site.png"),
+  plot = lobster_size_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
