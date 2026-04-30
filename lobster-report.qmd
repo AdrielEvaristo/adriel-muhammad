@@ -11,12 +11,10 @@ Data were downloaded from the EDI Data Portal on April 2026.
 SBC LTER: Reef: Abundance, size and fishing effort for California Spiny Lobster (*Panulirus interruptus*), ongoing since 2012.  
 Data link: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.77.8
 
-## Abstract Summary
-
-This data set contains long-term records of California spiny lobster abundance, size, and fishing effort from reef monitoring sites. This dataset provides analysis of changes in lobster populations and fishing activity through time.
+## Abstract Summary 
+This data set contains long-term records of California spiny lobster abundance, size, and fishing effort from reef monitoring sites. This dataset provides analysis of changes in lobster populations and fishing activity through time
 
 ## Owner Analysis: Lobster Abundance and Size
-
 ```{r}
 #| label: lobster-size-plot
 #| fig-cap: "Lobster size classes by site from 2019–2021."
