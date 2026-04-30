@@ -13,7 +13,7 @@ Data link: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc
 
 ## Abstract Summary
 
-This dataset contains long-term records of California spiny lobster abundance, size, and fishing effort from reef monitoring sites. This dataset provides analysis of changes in lobster populations and fishing activity through time.
+This data set contains long-term records of California spiny lobster abundance, size, and fishing effort from reef monitoring sites. This dataset provides analysis of changes in lobster populations and fishing activity through time.
 
 ## Owner Analysis: Lobster Abundance and Size
 
