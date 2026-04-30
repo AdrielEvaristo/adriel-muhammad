@@ -6,7 +6,7 @@ format: html
 
 ## Data Citation
 
-Data were downloaded from the EDI Data Portal on April 2026
+Data were downloaded from the EDI Data Portal on April 2026.
 
 SBC LTER: Reef: Abundance, size and fishing effort for California Spiny Lobster (*Panulirus interruptus*), ongoing since 2012.  
 Data link: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.77.8
