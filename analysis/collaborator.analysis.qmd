@@ -2,4 +2,14 @@
 title: "collaborator.analysis"
 format: html
 ---
+```{r}
+install.packages("tidyr")
 
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(here)
+lobster_traps <- read_csv(here::here("data/Lobster_Trap_Counts_All_Years_20210519.csv"))
+
+```
