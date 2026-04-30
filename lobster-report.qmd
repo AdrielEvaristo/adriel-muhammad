@@ -20,7 +20,7 @@ This dataset contains long-term records of California spiny lobster abundance, s
 ```{r}
 #| label: lobster-size-plot
 #| fig-cap: "Lobster size classes by site from 2019–2021."
-#| fig-alt: "Dodged bar plot showing counts of small and large lobsters across sampling sites."
+#| fig-alt: "Dodged bar plot showing counts of small and large lobsters across sampling sites"
 
 library(readr)
 library(dplyr)
