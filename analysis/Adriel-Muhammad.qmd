@@ -1,0 +1,68 @@
+---
+title: "Spiny Lobster Analysis"
+author: Adriel-Muhammad
+format: html
+---
+
+## Data Citation
+
+Data were downloaded from the EDI Data Portal on April 2026
+
+SBC LTER: Reef: Abundance, size and fishing effort for California Spiny Lobster (*Panulirus interruptus*), ongoing since 2012.  
+Data link: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-sbc.77.8
+
+## Abstract Summary
+
+This dataset contains long-term records of California spiny lobster abundance, size, and fishing effort from reef monitoring sites. This dataset provides analysis of changes in lobster populations and fishing activity through time.
+
+## Owner Analysis: Lobster Abundance and Size
+
+```{r}
+#| label: lobster-size-plot
+#| fig-cap: "Lobster size classes by site from 2019–2021."
+#| fig-alt: "Dodged bar plot showing counts of small and large lobsters across sampling sites."
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(here)
+
+lobster_abundance <- read_csv(here("data", "Lobster_Abundance_All_Years_20220829.csv")) %>% 
+  mutate(SIZE_MM = na_if(SIZE_MM, -99999))
+
+lobster_size_lrg <- lobster_abundance %>%
+  filter(YEAR %in% c(2019, 2020, 2021)) %>%
+  mutate(SIZE_BIN = if_else(SIZE_MM <= 70, "small", "large")) %>%
+  group_by(SITE, SIZE_BIN) %>%
+  summarize(COUNT = n(), .groups = "drop") %>%
+  drop_na()
+
+ggplot(data = lobster_size_lrg, aes(x = SITE, y = COUNT, fill = SIZE_BIN)) +
+  geom_col(position = "dodge", color = "black", alpha = 0.85) +
+  labs(
+    title = "Lobster Size Classes by Site",
+    subtitle = "California spiny lobsters sampled from 2019–2021",
+    x = "Site",
+    y = "Number of Lobsters",
+    fill = "Size Class"
+  ) +
+  theme_light() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+```
+
+# Collaborator Analysis:
+```{r}
+#| label: collaborator-plot
+#| fig-cap: "Collaborator visualization of lobster trap buoy counts."
+#| fig-alt: "Plot showing lobster trap buoy count patterns across sites or years."
+
+# Collaborator code goes here
+```
+
+# Discussion
+The visualizations indicate variation in lobster size distribution and abundance across sites and years. Some sites show high counts of smaller individuals, suggesting recent nursery habitat and others show relatively more large individuals on habitat quality. Temporal trends in lobster counts suggest that population dynamics are not consistent across locations. 
