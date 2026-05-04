@@ -2,8 +2,8 @@
 title: "collaborator.analysis"
 format: html
 ---
-
 ```{r}
+
 library(readr)
 library(dplyr)
 library(ggplot2)
@@ -34,6 +34,4 @@ max_lobster_traps <- lobster_traps %>%
     group_by(SITE, MONTH) %>%
     summarize(MAX_TRAPS = max(TRAPS, na.rm = TRUE))
 ```
-
-
 
