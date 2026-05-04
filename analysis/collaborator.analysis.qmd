@@ -35,3 +35,97 @@ max_lobster_traps <- lobster_traps %>%
     summarize(MAX_TRAPS = max(TRAPS, na.rm = TRUE))
 ```
 
+## Exercise: Data Visualization
+
+```{r}
+# Load packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+lobster_traps <- read_csv(
+  "https://pasta.lternet.edu/package/data/eml/knb-lter-sbc/77/8/66dd61c75bda17c23a3bce458c56ed84"
+) %>% 
+  mutate(TRAPS = na_if(TRAPS, -99999))
+```
+
+```{r}
+ggplot(data = lobster_traps, aes(x = TRAPS)) +
+    geom_histogram() +
+    facet_wrap( ~ YEAR)
+```
+
+```{r}
+lobsters_traps_summarize <- lobster_traps %>% 
+  group_by(SITE, YEAR) %>% 
+  summarize(TOTAL_TRAPS = sum(TRAPS, na.rm = TRUE))
+
+# line plot
+ggplot(data = lobsters_traps_summarize, aes(x = YEAR, y = TOTAL_TRAPS)) +
+    geom_line(aes(color = SITE))
+
+# line and point plot
+ggplot(data = lobsters_traps_summarize, aes(x = YEAR, y = TOTAL_TRAPS)) +
+    geom_point(aes(color = SITE)) +
+    geom_line(aes(color = SITE))
+```
+
+```{r}
+lobster_traps_fishing_pressure <- lobster_traps %>% 
+    filter(YEAR %in% c(2019, 2020, 2021)) %>%
+    mutate(FISHING_PRESSURE = if_else(TRAPS >= 8, true = "high", false = "low")) %>%
+    group_by(SITE, FISHING_PRESSURE) %>%
+    summarize(COUNT = n()) %>%
+    drop_na()
+
+# bar plot
+ggplot(data = lobster_traps_fishing_pressure, aes(x = SITE, y = COUNT, fill = FISHING_PRESSURE)) +
+    geom_col()
+
+# dodged bar plot
+ggplot(data = lobster_traps_fishing_pressure, aes(x = SITE, y = COUNT, fill = FISHING_PRESSURE)) +
+    geom_col(position = "dodge")
+```
+
+# Make plots pretty
+```{r}
+# Styled line and point plot
+lobster_traps_plot <- ggplot(
+  data = lobsters_traps_summarize,
+  aes(x = YEAR, y = TOTAL_TRAPS, color = SITE)
+) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_line(linewidth = 1) +
+  labs(
+    title = "Total Lobster Traps by Site Over Time",
+    x = "Year",
+    y = "Total Number of Traps",
+    color = "Site"
+  ) +
+  scale_x_continuous(
+    breaks = seq(min(lobsters_traps_summarize$YEAR),
+                 max(lobsters_traps_summarize$YEAR),
+                 by = 1)
+  ) +
+  theme_light() +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    axis.title = element_text(size = 12),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+
+lobster_traps_plot
+```
+
+```{r}
+# Save the final plot
+ggsave(
+  filename = "figs/lobster_traps_by_site_over_time.png",
+  plot = lobster_traps_plot,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+```
